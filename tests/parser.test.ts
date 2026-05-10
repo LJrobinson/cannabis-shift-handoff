@@ -28,9 +28,26 @@ bathroom sink leaking again
     expect(markdown).toContain("# Shift Handoff Summary");
     expect(markdown).toContain("Cash / Drawer Issues");
     expect(markdown).toContain("follow-up required");
+    expect(markdown).toContain("Risk: medium");
     expect(markdown).toContain(
       "Action: Verify drawer closeout, cash drop, and register reconciliation."
     );
+  });
+
+  it("assigns rule-based risk levels", () => {
+    const input = `
+metrc tag on gmo eighths looked weird
+manager left a note for opening shift
+drawer 1 was short 12.75
+hold blue dream eighths until Sarah checks tags
+`;
+
+    const result = parseShiftNotes(input);
+
+    expect(result[0].riskLevel).toBe("high");
+    expect(result[1].riskLevel).toBe("low");
+    expect(result[2].riskLevel).toBe("medium");
+    expect(result[3].riskLevel).toBe("high");
   });
 
   it("adds suggested action items for known categories", () => {

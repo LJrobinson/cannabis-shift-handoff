@@ -13,10 +13,13 @@ export const HANDOFF_CATEGORIES = [
 
 export type HandoffCategory = (typeof HANDOFF_CATEGORIES)[number];
 
+export type RiskLevel = "low" | "medium" | "high";
+
 export type HandoffItem = {
   category: HandoffCategory;
   text: string;
   followUpRequired: boolean;
   confidence: number;
+  riskLevel: RiskLevel;
   action?: string;
 };

@@ -1,4 +1,4 @@
-import type { HandoffCategory, HandoffItem } from "./categories";
+import type { HandoffCategory, HandoffItem, RiskLevel } from "./categories";
 
 const rules: Array<{
   category: HandoffCategory;
@@ -58,6 +58,41 @@ const actionByCategory: Partial<Record<HandoffCategory, string>> = {
   staff_note: "Review manager or staff note for context.",
 };
 
+const defaultRiskByCategory: Record<HandoffCategory, RiskLevel> = {
+  cash: "medium",
+  customer: "medium",
+  inventory: "medium",
+  product_hold: "high",
+  vendor_receiving: "medium",
+  compliance: "high",
+  maintenance: "medium",
+  staff_note: "low",
+  manager_followup: "medium",
+  unknown: "low",
+};
+
+const highRiskPhrases = [
+  "metrc",
+  "tag",
+  "compliance",
+  "ccb",
+  "package id",
+  "do not sell",
+  "hold",
+  "quarantine",
+  "pull from floor",
+];
+
+const mediumRiskPhrases = [
+  "short",
+  "over",
+  "drawer",
+  "cash drop",
+  "leak",
+  "broken",
+  "safe",
+];
+
 export function parseShiftNotes(input: string): HandoffItem[] {
   return input
     .split(/\r?\n/)
@@ -79,6 +114,7 @@ function classifyLine(line: string): HandoffItem {
       text: line,
       followUpRequired: false,
       confidence: 0.25,
+      riskLevel: getRiskLevel("unknown", normalized),
     };
   }
 
@@ -87,6 +123,19 @@ function classifyLine(line: string): HandoffItem {
     text: line,
     followUpRequired: match.followUpRequired ?? false,
     confidence: 0.8,
+    riskLevel: getRiskLevel(match.category, normalized),
     action: actionByCategory[match.category],
   };
+}
+
+function getRiskLevel(category: HandoffCategory, normalizedText: string): RiskLevel {
+  if (highRiskPhrases.some((phrase) => normalizedText.includes(phrase))) {
+    return "high";
+  }
+
+  if (mediumRiskPhrases.some((phrase) => normalizedText.includes(phrase))) {
+    return "medium";
+  }
+
+  return defaultRiskByCategory[category];
 }

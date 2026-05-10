@@ -21,8 +21,9 @@ export function toMarkdown(items: HandoffItem[]): string {
 
     const lines = categoryItems.map((item) => {
       const followUp = item.followUpRequired ? " _(follow-up required)_" : "";
+      const risk = `\n  Risk: ${item.riskLevel}`;
       const action = item.action ? `\n  Action: ${item.action}` : "";
-      return `- ${item.text}${followUp}${action}`;
+      return `- ${item.text}${followUp}${risk}${action}`;
     });
 
     return `## ${title}\n\n${lines.join("\n")}`;
