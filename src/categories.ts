@@ -18,4 +18,5 @@ export type HandoffItem = {
   text: string;
   followUpRequired: boolean;
   confidence: number;
+  action?: string;
 };

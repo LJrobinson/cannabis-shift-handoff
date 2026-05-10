@@ -47,6 +47,17 @@ const rules: Array<{
   },
 ];
 
+const actionByCategory: Partial<Record<HandoffCategory, string>> = {
+  cash: "Verify drawer closeout, cash drop, and register reconciliation.",
+  customer: "Review complaint details and inspect related product or transaction.",
+  vendor_receiving: "Confirm invoice or manifest before completing receiving.",
+  compliance: "Verify compliance identifiers, package tags, and related records.",
+  maintenance: "Notify manager or maintenance contact and track resolution.",
+  product_hold: "Keep product off the sales floor until reviewed and cleared.",
+  inventory: "Investigate count, package, or inventory variance.",
+  staff_note: "Review manager or staff note for context.",
+};
+
 export function parseShiftNotes(input: string): HandoffItem[] {
   return input
     .split(/\r?\n/)
@@ -76,5 +87,6 @@ function classifyLine(line: string): HandoffItem {
     text: line,
     followUpRequired: match.followUpRequired ?? false,
     confidence: 0.8,
+    action: actionByCategory[match.category],
   };
 }
