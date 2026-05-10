@@ -29,4 +29,13 @@ bathroom sink leaking again
     expect(markdown).toContain("Cash / Drawer Issues");
     expect(markdown).toContain("follow-up required");
   });
+
+  it("classifies vendor drop-offs as vendor receiving, not cash", () => {
+  const input = "vendor dropped off rythm but no invoice";
+
+  const result = parseShiftNotes(input);
+
+  expect(result).toHaveLength(1);
+  expect(result[0].category).toBe("vendor_receiving");
+  });
 });
