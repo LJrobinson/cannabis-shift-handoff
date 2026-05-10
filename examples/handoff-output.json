@@ -1,0 +1,54 @@
+
+> handoff
+> tsx src/cli.ts examples/messy-shift-note.txt --json
+
+[
+  {
+    "category": "cash",
+    "text": "drawer 2 was short 18.43 maybe cash drop issue",
+    "followUpRequired": true,
+    "confidence": 0.8,
+    "riskLevel": "medium",
+    "action": "Verify drawer closeout, cash drop, and register reconciliation."
+  },
+  {
+    "category": "customer",
+    "text": "customer complained about old pre rolls batch 11894",
+    "followUpRequired": true,
+    "confidence": 0.8,
+    "riskLevel": "medium",
+    "action": "Review complaint details and inspect related product or transaction."
+  },
+  {
+    "category": "vendor_receiving",
+    "text": "vendor dropped off rythm but no invoice",
+    "followUpRequired": true,
+    "confidence": 0.8,
+    "riskLevel": "medium",
+    "action": "Confirm invoice or manifest before completing receiving."
+  },
+  {
+    "category": "compliance",
+    "text": "metrc tag on gmo eighths looked weird",
+    "followUpRequired": true,
+    "confidence": 0.8,
+    "riskLevel": "high",
+    "action": "Verify compliance identifiers, package tags, and related records."
+  },
+  {
+    "category": "maintenance",
+    "text": "bathroom sink leaking again",
+    "followUpRequired": true,
+    "confidence": 0.8,
+    "riskLevel": "medium",
+    "action": "Notify manager or maintenance contact and track resolution."
+  },
+  {
+    "category": "cash",
+    "text": "Aly asked if cash drop was checked twice",
+    "followUpRequired": true,
+    "confidence": 0.8,
+    "riskLevel": "medium",
+    "action": "Verify drawer closeout, cash drop, and register reconciliation."
+  }
+]

@@ -67,3 +67,12 @@ Aly asked if we checked the cash drop twice
 
 ## Manager Notes
 - Aly requested confirmation that cash drop was checked twice.
+
+## Current Features
+
+- Parses messy dispensary shift notes into categorized handoff items
+- Groups notes into manager-friendly Markdown summaries
+- Supports JSON output for structured workflows
+- Assigns rule-based risk levels
+- Suggests follow-up actions for known issue types
+- Includes regression coverage for real-world phrase collisions like vendor drop-offs vs. cash drops
