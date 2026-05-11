@@ -97,65 +97,36 @@ npm run handoff -- examples/messy-shift-note.txt --json
 
 `--json` is also stdout-only and prints the parsed `HandoffItem[]` JSON.
 
-Write a saved run folder:
+## MOBY-compatible output
+
+`--run-dir` is additive: default mode still prints Markdown to stdout, `--json` still prints `HandoffItem[]` JSON to stdout, and explicit run-directory mode also writes MOBY-compatible artifacts under `<run-dir>/<run-id>/`.
+
+Write a default Markdown run artifact:
 
 ```sh
 npm run handoff -- examples/messy-shift-note.txt --run-dir output/runs --run-id shift-run-001
 ```
 
-Creates:
-
 ```txt
 output/runs/shift-run-001/
-  handoff-output.md
-  moby-run-manifest.json
+|-- handoff-output.md
+`-- moby-run-manifest.json
 ```
 
-Write a JSON saved run folder:
+Write a JSON run artifact:
 
 ```sh
 npm run handoff -- examples/messy-shift-note.txt --json --run-dir output/runs --run-id shift-json-run-001
 ```
 
-Creates:
-
 ```txt
 output/runs/shift-json-run-001/
-  handoff-output.json
-  moby-run-manifest.json
+|-- handoff-output.json
+`-- moby-run-manifest.json
 ```
 
-If `--run-id` is omitted, the CLI generates a timestamp-based run ID. `handoff-output.md` and `handoff-output.json` preserve the same output shapes printed to stdout. `moby-run-manifest.json` follows the `MobyRunManifest` contract from `moby-core` and describes the shift notes source, handoff output artifact, derived warning metadata, and summary counts.
+If `--run-id` is omitted, the CLI generates a timestamp-based run ID. `handoff-output.md` or `handoff-output.json` is the normal result artifact, while `moby-run-manifest.json` describes the run, sources, artifacts, warnings, and summary counts.
 
-## Run Directory Output
+Committed sample `moby-run-manifest.json` files can be displayed in TrackingTHC MOBY Mission Control at `/moby-runs`, making shift-handoff runs visible alongside other MOBY ecosystem artifacts.
 
-Run-directory mode is additive and only runs when `--run-dir` is provided.
-
-```txt
-handoff-output.md
-handoff-output.json
-```
-
-Contains the same Markdown or JSON handoff output printed to stdout.
-
-```txt
-moby-run-manifest.json
-```
-
-Contains the MOBY-compatible run manifest:
-
-```txt
-schemaVersion
-runId
-runType
-generatedBy
-generatedAt
-status
-sources
-artifacts
-warnings
-summary
-metadata
-```
-
-The parser still returns `HandoffItem[]`. The MOBY run manifest derives `MobyWarning` objects at the output boundary for high-risk items, required follow-ups, low-confidence classifications, and uncategorized notes.
+This module does not replace manager judgment. It creates reviewable handoff artifacts and follow-up context so supervisors can make the final operational call.
