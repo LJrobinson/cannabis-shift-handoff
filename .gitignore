@@ -1,8 +1,35 @@
 node_modules/
 dist/
+build/
 coverage/
+
+# Env / secrets
 .env
-.DS_Store
+.env.*
+!.env.example
+
+# Logs
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test / tooling
 .vitest/
+.nyc_output/
+
+# Generated run/output artifacts
+runs/
+output/
+outputs/
+artifacts/
+tmp/
+temp/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

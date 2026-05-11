@@ -73,6 +73,89 @@ Aly asked if we checked the cash drop twice
 - Parses messy dispensary shift notes into categorized handoff items
 - Groups notes into manager-friendly Markdown summaries
 - Supports JSON output for structured workflows
+- Writes optional run-directory handoff artifacts
+- Emits a MOBY-compatible run manifest sidecar in run-directory mode
 - Assigns rule-based risk levels
 - Suggests follow-up actions for known issue types
 - Includes regression coverage for real-world phrase collisions like vendor drop-offs vs. cash drops
+
+## Commands
+
+Run the default Markdown handoff:
+
+```sh
+npm run handoff -- examples/messy-shift-note.txt
+```
+
+The normal command is stdout-only. It prints Markdown and does not create files.
+
+Run JSON output:
+
+```sh
+npm run handoff -- examples/messy-shift-note.txt --json
+```
+
+`--json` is also stdout-only and prints the parsed `HandoffItem[]` JSON.
+
+Write a saved run folder:
+
+```sh
+npm run handoff -- examples/messy-shift-note.txt --run-dir output/runs --run-id shift-run-001
+```
+
+Creates:
+
+```txt
+output/runs/shift-run-001/
+  handoff-output.md
+  moby-run-manifest.json
+```
+
+Write a JSON saved run folder:
+
+```sh
+npm run handoff -- examples/messy-shift-note.txt --json --run-dir output/runs --run-id shift-json-run-001
+```
+
+Creates:
+
+```txt
+output/runs/shift-json-run-001/
+  handoff-output.json
+  moby-run-manifest.json
+```
+
+If `--run-id` is omitted, the CLI generates a timestamp-based run ID. `handoff-output.md` and `handoff-output.json` preserve the same output shapes printed to stdout. `moby-run-manifest.json` follows the `MobyRunManifest` contract from `moby-core` and describes the shift notes source, handoff output artifact, derived warning metadata, and summary counts.
+
+## Run Directory Output
+
+Run-directory mode is additive and only runs when `--run-dir` is provided.
+
+```txt
+handoff-output.md
+handoff-output.json
+```
+
+Contains the same Markdown or JSON handoff output printed to stdout.
+
+```txt
+moby-run-manifest.json
+```
+
+Contains the MOBY-compatible run manifest:
+
+```txt
+schemaVersion
+runId
+runType
+generatedBy
+generatedAt
+status
+sources
+artifacts
+warnings
+summary
+metadata
+```
+
+The parser still returns `HandoffItem[]`. The MOBY run manifest derives `MobyWarning` objects at the output boundary for high-risk items, required follow-ups, low-confidence classifications, and uncategorized notes.
